@@ -1,0 +1,3 @@
+INSERT INTO public.clientes (nome_completo,email,telefone,cpf,data_nascimento,status,senha,cep,logradouro,numero,complemento,bairro,cidade,estado,cargo,setor,email_corporativo,telefone_comercial,empresa_id,codigo_recuperacao,expiracao_codigo) VALUES
+	 ('Teste Aluno 2','teste@email.com','81900000000','81703759087','2004-08-06',true,'$2a$10$MU1qXmAN9OR8Wg8kBG/iG.tWMkExa3fOaNgCgIdcvjGXxuMPocAWm','50030-170','Rua do Bom Jesus','237','','Recife','Recife','PE','Bolsista','','','',1,NULL,NULL),
+	 ('Teste Aluno','alunoteste@teste.com','81900000000','23610609060','2001-07-29',true,'$2a$10$JsucSh5yAuAlerWmaWxDMewNvDuSgV0Ko/iGg7xRO1HKZrMte8jBq','50030-170','Rua do Bom Jesus','237','','Recife','Recife','PE','','','','',1,NULL,NULL);

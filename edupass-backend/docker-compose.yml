@@ -1,0 +1,36 @@
+services:
+  db:
+    image: postgres:15
+    container_name: prol-educa-db
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - prol-educa-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    image: prol-educa
+    container_name: prol-educa-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    networks:
+      - prol-educa-network
+
+volumes:
+  postgres_data:
+
+networks:
+  prol-educa-network:

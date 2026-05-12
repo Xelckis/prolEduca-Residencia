@@ -1,0 +1,10 @@
+{
+  "company": {
+    "companyId": 1
+  },
+  "billing": {
+    "value": 10.94,
+    "installments": 1,
+    "paymentToken": ""
+  }
+}

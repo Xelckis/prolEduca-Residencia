@@ -1,0 +1,142 @@
+package com.example.prol_educa.controller;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.prol_educa.entities.AuthorizedUsers;
+import com.example.prol_educa.models.AuthorizedUsersDto;
+import com.example.prol_educa.service.AuthorizedUsersService;
+
+@RestController
+@RequestMapping("/AuthorizedUsers")
+public class AuthorizedUsersController {
+
+  @Autowired
+  public AuthorizedUsersService service;
+
+  @PostMapping("/create")
+  public ResponseEntity<?> create(@RequestBody AuthorizedUsersDto dto) {
+    if (dto == null 
+        || dto.getEmail() == null || dto.getEmail().isBlank() 
+        || dto.getCpf() == null || dto.getCpf().isBlank() 
+        /* adicionar outras validações se desejar */) {
+      return ResponseEntity.badRequest()
+          .body(Collections.singletonMap("message", "Dados do cliente inválidos ou incompletos"));
+    }
+
+    try {
+      service.create(dto);
+      return ResponseEntity.ok(Collections.singletonMap("message", "Cliente cadastrado com sucesso"));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(Collections.singletonMap("message", "Erro ao cadastrar cliente. Tente novamente."));
+    }
+  }
+
+  @GetMapping
+  @PreAuthorize("hasRole('ADMIN') or hasRole('COMPANY')")
+  public ResponseEntity<?> findAll() {
+    try {
+      List<AuthorizedUsers> AuthorizedUsers = service.findAll();
+      return ResponseEntity.ok(AuthorizedUsers);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(Collections.singletonMap("message", "Erro ao buscar clientes Autorizados."));
+    }
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<?> findById(@PathVariable("id") Integer id) {
+    if (id == null || id <= 0) {
+      return ResponseEntity.badRequest()
+          .body(Collections.singletonMap("message", "ID inválido"));
+    }
+
+    try {
+      AuthorizedUsers AuthorizedUsers = service.findById(id);
+      return ResponseEntity.ok(AuthorizedUsers);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(Collections.singletonMap("message", "Erro ao buscar cliente."));
+    }
+  }
+
+  @PutMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<?> update(@PathVariable("id") Integer id, @RequestBody AuthorizedUsersDto dto) {
+    if (id == null || id <= 0) {
+      return ResponseEntity.badRequest()
+          .body(Collections.singletonMap("message", "ID inválido"));
+    }
+    
+    if (dto == null /* || outras validações aqui, se desejar */) {
+      return ResponseEntity.badRequest()
+          .body(Collections.singletonMap("message", "Dados do cliente inválidos ou incompletos"));
+    }
+
+    try {
+      service.update(id, dto);
+      return ResponseEntity.ok(Collections.singletonMap("message", "Cliente atualizado com sucesso"));
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(Collections.singletonMap("message", "Erro ao atualizar cliente."));
+    }
+  }
+
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN') or hasRole('COMPANY')")
+  public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+    if (id == null || id <= 0) {
+      return ResponseEntity.badRequest()
+          .body(Collections.singletonMap("message", "ID inválido"));
+    }
+
+    try {
+      service.delete(id);
+      return ResponseEntity.ok(Collections.singletonMap("message", "Cliente deletado com sucesso"));
+    } catch (DataIntegrityViolationException ex) {
+      return ResponseEntity.status(HttpStatus.CONFLICT)
+          .body(Collections.singletonMap("message", "Não é possível excluir o cliente, pois ele está vinculado a um bolsista."));
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(Collections.singletonMap("message", "Erro inesperado ao tentar excluir o cliente."));
+    }
+  }
+
+  @GetMapping("/company/{id}")
+  @PreAuthorize("hasRole('ADMIN') or hasRole('COMPANY')")
+  public ResponseEntity<?> getAuthorizedUsersByCompany(@PathVariable Integer id) {
+    if (id == null || id <= 0) {
+      return ResponseEntity.badRequest()
+          .body(Collections.singletonMap("message", "ID inválido"));
+    }
+    try {
+      List<AuthorizedUsers> AuthorizedUsers = service.findByEmpresaId(id);
+      return ResponseEntity.ok(AuthorizedUsers);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(Collections.singletonMap("message", "Erro ao buscar clientes da empresa."));
+    }
+  }
+
+}

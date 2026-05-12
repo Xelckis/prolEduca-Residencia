@@ -1,0 +1,1 @@
+ALTER TABLE cursos ADD COLUMN ano_bolsa VARCHAR(255);
