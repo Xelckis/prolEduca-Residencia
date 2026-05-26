@@ -10,10 +10,9 @@ const BriefcaseIcon = () => <Briefcase className="w-5 h-5 mr-3 text-slate-500 gr
 const UsersGroupIcon = () => <Users className="w-5 h-5 mr-3 text-slate-500 group-hover:text-blue-600 transition-colors" />;
 const LogoutIcon = () => <LogOut className="w-5 h-5 mr-3 text-slate-500 group-hover:text-red-500 transition-colors" />;
 
-
 export default function Header({ userLoggedIn, setUserLoggedIn }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Para menu hambúrguer
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const user = userLoggedIn ? JSON.parse(localStorage.getItem("user")) : null;
@@ -29,50 +28,41 @@ export default function Header({ userLoggedIn, setUserLoggedIn }) {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUserLoggedIn(false);
-    setIsDropdownOpen(false);
-    setIsMobileMenuOpen(false);
-    navigate("/login");
+    // Alerta de confirmação de UX antes de sair
+    if (window.confirm("Você tem certeza que deseja sair da plataforma?")) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUserLoggedIn(false);
+      setIsDropdownOpen(false);
+      setIsMobileMenuOpen(false);
+      navigate("/login");
+    }
   };
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md">
+    <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center h-16 w-full">
           <nav className="hidden md:flex items-center space-x-10 flex-1">    
             
           <div className="flex-shrink-0">
             <Link to="/">
-              <img src={logo} alt="Logo" className="w-32 cursor-pointer" />
+              <img src={logo} alt="Logo" className="w-32 cursor-pointer hover:opacity-90 transition-opacity" />
             </Link>
           </div>
-            {/* <Link
-              href="#comofunciona"
-              className="text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] transition-colors"
-            >
-              Como Funciona
-            </Link> */}
             <Link to="/#comofunciona"
-            className="text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] transition-colors">Como Funciona</Link>
-            {/* <Link
-              to="/"
-              className="text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] transition-colors"
-            >
-              Para Empresas
-            </Link> */}
+            className="text-sm font-medium text-gray-700 hover:text-blue-500 transition-colors">Como Funciona</Link>
             <Link
               to="/beneficios"
-              className="text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-blue-500 transition-colors"
             >
               Benefícios
             </Link>
             <Link
               to="/suport"
-              className="text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] transition-colors"
+              className="text-sm font-medium text-gray-700 hover:text-blue-500 transition-colors"
             >
               Suporte
             </Link>
@@ -100,9 +90,8 @@ export default function Header({ userLoggedIn, setUserLoggedIn }) {
 
                 {isDropdownOpen && (
                   <div
-                    className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 py-1 origin-top-right transition-all duration-150 ease-out transform opacity-100 scale-100" // Animação suave
+                    className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 py-1 origin-top-right transition-all duration-150 ease-out"
                     role="menu"
-                    aria-orientation="vertical"
                   >
                     {user && (
                       <div className="px-4 py-3 border-b border-slate-100">
@@ -111,15 +100,15 @@ export default function Header({ userLoggedIn, setUserLoggedIn }) {
                       </div>
                     )}
                     <div className="py-1">
-                      <Link to="/perfil" onClick={() => setIsDropdownOpen(false)} className="group flex items-center px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-blue-600 w-full transition-colors " role="menuitem">
+                      <Link to="/perfil" onClick={() => setIsDropdownOpen(false)} className="group flex items-center px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-blue-600 w-full transition-colors ">
                         <ProfileIcon /> Perfil
                       </Link>
-                      <Link to="/minhas-bolsas" onClick={() => setIsDropdownOpen(false)} className="group flex items-center px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-blue-600 w-full transition-colors" role="menuitem">
+                      <Link to="/minhas-bolsas" onClick={() => setIsDropdownOpen(false)} className="group flex items-center px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 hover:text-blue-600 w-full transition-colors">
                         <BriefcaseIcon /> Minhas Bolsas
                       </Link>
                     </div>
                     <div className="border-t border-slate-100 py-1">
-                      <button onClick={handleLogout} className="group flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 w-full transition-colors" role="menuitem">
+                      <button onClick={handleLogout} className="group flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 w-full transition-colors text-left">
                         <LogoutIcon /> Sair
                       </button>
                     </div>
@@ -130,13 +119,13 @@ export default function Header({ userLoggedIn, setUserLoggedIn }) {
               <div className="flex items-center space-x-3 ml-auto">
                 <Link
                   to="/cadastro"
-                    className="btn text-sm rounded-[8px] px-4 py-2 bg-[#F5F7F8] hover:bg-[#E6EAEC]"
+                  className="btn btn-secondary text-sm px-4 py-2"
                 >
                   Cadastre-se Grátis
                 </Link>
                 <Link
                   to="/login"
-                  className="btn text-sm bg-[#30ADE7] text-[#ffff] hover:bg-[#219ed8] rounded-[8px] px-6 py-3"
+                  className="btn btn-primary text-sm px-6 py-2"
                 >
                   Entrar
                 </Link>
@@ -158,9 +147,9 @@ export default function Header({ userLoggedIn, setUserLoggedIn }) {
             >
               <span className="sr-only">Abrir menu principal</span>
               {isMobileMenuOpen ? (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
               ) : (
-                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                <svg className="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
               )}
             </button>
           </div>
@@ -171,38 +160,29 @@ export default function Header({ userLoggedIn, setUserLoggedIn }) {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-16 inset-x-0 bg-white shadow-lg z-40 p-2 transition transform origin-top" id="mobile-menu">
           <div className="pt-2 pb-3 space-y-1">
-            {/* <Link
-              to="/"
-              className="block px-4 py-2 text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] hover:bg-[#F0F8FC] rounded transition-colors"
-            >
-              Parceria Instituições
-            </Link> */}
             <Link
               to="/#comofunciona"
-              className="block px-4 py-2 text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] hover:bg-[#F0F8FC] rounded transition-colors"
+              onClick={closeMobileMenu}
+              className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-500 hover:bg-blue-50 rounded transition-colors"
             >
               Como funciona
             </Link>
             <Link
               to="/beneficios"
-              className="block px-4 py-2 text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] hover:bg-[#F0F8FC] rounded transition-colors"
+              onClick={closeMobileMenu}
+              className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-500 hover:bg-blue-50 rounded transition-colors"
             >
               Benefícios
             </Link>
-                        <Link
+            <Link
               to="/suport"
-              className="block px-4 py-2 text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] hover:bg-[#F0F8FC] rounded transition-colors"
+              onClick={closeMobileMenu}
+              className="block px-4 py-2 text-base font-medium text-gray-700 hover:text-blue-500 hover:bg-blue-50 rounded transition-colors"
             >
               Suporte
             </Link>
-            {/* <Link
-              to="/"
-              className="block px-4 py-2 text-sm font-bold text-[#2F2F2F] hover:text-[#30ADE7] hover:bg-[#F0F8FC] rounded transition-colors"
-            >
-              Para Empresas
-            </Link> */}
             {userLoggedIn && user?.roles?.includes("ROLE_ADMIN") && (
-              <Link to="/admin/dashboard" onClick={closeMobileMenu} className="block px-3 py-2 rounded-md text-base font-medium text-blue-600 hover:bg-blue-50">Painel Admin</Link>
+              <Link to="/admin/dashboard" onClick={closeMobileMenu} className="block px-4 py-2 rounded-md text-base font-medium text-blue-600 hover:bg-blue-50">Painel Admin</Link>
             )}
           </div>
           {userLoggedIn ? (
@@ -223,20 +203,22 @@ export default function Header({ userLoggedIn, setUserLoggedIn }) {
               <div className="space-y-1">
                 <Link to="/perfil" onClick={closeMobileMenu} className="group flex items-center px-4 py-2.5 text-base font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 rounded-md"><ProfileIcon /> Perfil</Link>
                 <Link to="/minhas-bolsas" onClick={closeMobileMenu} className="group flex items-center px-4 py-2.5 text-base font-medium text-slate-700 hover:bg-slate-50 hover:text-blue-600 rounded-md"><BriefcaseIcon /> Minhas Bolsas</Link>
-                <button onClick={handleLogout} className="group flex items-center px-4 py-2.5 text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700 w-full rounded-md"><LogoutIcon /> Sair</button>
+                <button onClick={handleLogout} className="group flex items-center px-4 py-2.5 text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700 w-full text-left rounded-md"><LogoutIcon /> Sair</button>
               </div>
             </div>
           ) : (
-            <div className="pt-4 pb-3 border-t border-slate-200 space-y-3">
+            <div className="pt-4 pb-3 border-t border-slate-200 space-y-3 px-4 flex flex-col">
               <Link
                   to="/login"
-                  className="btn text-sm bg-[#30ADE7] text-[#ffff] hover:bg-[#219ed8] rounded-[8px] px-6 py-3 mr-4"
+                  onClick={closeMobileMenu}
+                  className="btn btn-primary text-center w-full"
                 >
                   Entrar
                 </Link>
                <Link
                   to="/cadastro"
-                    className="btn text-sm rounded-[8px] px-4 py-2 bg-[#F5F7F8] hover:bg-[#E6EAEC]"
+                  onClick={closeMobileMenu}
+                  className="btn btn-secondary text-center w-full"
                 >
                   Cadastre-se Grátis
                 </Link>
@@ -247,3 +229,4 @@ export default function Header({ userLoggedIn, setUserLoggedIn }) {
     </header>
   );
 }
+
