@@ -154,7 +154,7 @@ export default function FiltroCurso({ onBuscar, initialFilters }) {
   };
 
   return (
-    <div className="relative max-w-6xl mx-auto p-4 px-4 sm:px-6 lg:px-8 bg-white rounded-[24px] shadow-[0_4px_6px_-2px_rgba(0,0,0,0.1)] mt-0 sm:-mt-15 md:-mt-40">
+    <div className="relative max-w-6xl mx-auto p-4 px-4 sm:px-6 lg:px-8 bg-white rounded-[24px] shadow-[0_4px_6px_-2px_rgba(0,0,0,0.1)] mt-0 sm:-mt-15 md:-mt-5">
       <div className="p-4 space-y-2">
         <h2 className="text-2xl font-bold text-[#2F2F2F]">Vamos procurar uma oportunidade?</h2>
         <p className="text-base text-[#757575]">
