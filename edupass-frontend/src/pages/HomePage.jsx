@@ -35,7 +35,7 @@ function HomePage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative w-full h-[340px] md:h-[670px] lg:h-[472px] bg-cover bg-center bg-[url('/assets/banners/banner-proledupass-mobile.jpeg')] lg:bg-[url('/src/assets/banner5.png')]">
+      <section className="relative w-full h-[340px] md:h-[670px] lg:h-[472px] bg-cover bg-center bg-[url('/assets/banners/banner-proledupass-mobile.jpeg')] lg:bg-[url('/src/assets/banner.png')]">
 
   <div className="absolute inset-0 flex items-center justify-between px-8 lg:px-20">
 
